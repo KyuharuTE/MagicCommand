@@ -8,7 +8,7 @@
 
 
 # 💖 下载地址
-- Github Releases：[https://github.com/KyuharuTE/MagicCommand/releases](https://github.com/KyuharuTE/fricktools/releases "https://github.com/KyuharuTE/fricktools/releases")
+- Github Releases：[https://github.com/KyuharuTE/MagicCommand/releases](https://github.com/KyuharuTE/MagicCommand/releases "https://github.com/KyuharuTE/MagicCommand/releases")
 
 ------------
 

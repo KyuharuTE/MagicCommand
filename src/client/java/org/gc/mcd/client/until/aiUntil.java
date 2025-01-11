@@ -12,7 +12,7 @@ public class aiUntil {
     private static final String URL = "https://api.chatanywhere.tech/v1/chat/completions";
     private static final OkHttpClient CLIENT = new OkHttpClient();
     private static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
-    private static final String SYSTEM_CONTENT = "你是一个我的世界 Ai 命令助理，帮助用户写命令，你的职责就是根据用户的关键词生成命令，版本是 Java 1.20.4 你只需要生成命令并告诉我，多余的话请不要讲，如果用户输入和命令无关，请用 /say <内容> 命令告诉他，如果你要生成两条及以上的指令，请使用&&分割它们。";
+    private static final String SYSTEM_CONTENT = "你是一个我的世界 Ai 命令助理，帮助用户写命令，你的职责就是根据用户的关键词生成命令，版本是 Java 1.20.4 你只需要生成命令并告诉我，多余的话请不要讲，如果用户输入和命令无关，请用 /say <内容> 命令告诉他，如果你要生成两条及以上的指令，请使用&&分割它们，分割时不要用空格来增加美观。";
 
     public static String getAiReturn(String content) throws IOException, InterruptedException, ExecutionException {
         String json = String.format("""

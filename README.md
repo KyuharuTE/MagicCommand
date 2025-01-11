@@ -8,6 +8,7 @@
 
 
 # 💖 下载地址
+- 123 Pan: [https://www.123684.com/s/T1erVv-kDxb](https://www.123684.com/s/T1erVv-kDxb "https://www.123684.com/s/T1erVv-kDxb")
 - Github Releases：[https://github.com/KyuharuTE/MagicCommand/releases](https://github.com/KyuharuTE/MagicCommand/releases "https://github.com/KyuharuTE/MagicCommand/releases")
 
 ------------

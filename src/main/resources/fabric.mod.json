@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "mcd",
+  "version": "${version}",
+  "name": "MagicCommand",
+  "description": "MagicCommand But Better than Netease",
+  "authors": [],
+  "contact": {},
+  "license": "GPL-3.0",
+  "icon": "assets/mcd/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "org.gc.mcd.client.McdClient"
+    ],
+    "main": [
+      "org.gc.mcd.Mcd"
+    ]
+  },
+  "mixins": [
+    "mcd.mixins.json",
+    {
+      "config": "mcd.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

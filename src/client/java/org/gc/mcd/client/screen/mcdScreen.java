@@ -13,6 +13,7 @@ import net.minecraft.util.Formatting;
 import org.gc.mcd.client.until.aiUntil;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
@@ -34,7 +35,9 @@ public class mcdScreen extends Screen {
         int maxWidth = this.width - 40;
         this.multilineText = MultilineText.create(this.textRenderer, text, maxWidth);
 
-        TextFieldWidget textField = new TextFieldWidget(this.textRenderer, centerX - 100, this.height - 30, 150, 20, Text.of("Input"));
+        TextFieldWidget textField = new TextFieldWidget(this.textRenderer, centerX - 100, this.height - 30, 150, 20,
+                Text.of("Input"));
+        textField.setMaxLength(255);
         textField.setPlaceholder(Text.of("请输入提示词..."));
         this.addSelectableChild(textField);
 
@@ -47,25 +50,32 @@ public class mcdScreen extends Screen {
             executeAiCommand(content, textField, button);
         }).width(50).position(centerX + 60, this.height - 30).build();
 
+        ButtonWidget changeKeyButton = ButtonWidget.builder(Text.of("修改 API Key"), button -> {
+            MinecraftClient.getInstance().setScreen(new mcdKeyScreen());
+        }).width(80).position(this.width - 100, 20).build();
+
         addDrawableChild(textField);
         addDrawableChild(sendButton);
+        addDrawableChild(changeKeyButton);
     }
 
     private void executeAiCommand(String content, TextFieldWidget textField, ButtonWidget button) {
-        try {
-            String aiResult = aiUntil.getAiReturn(content);
-            Logger.getLogger("MagicCommand").info("Get message to server: " + aiResult);
-            textField.setText("");
-            sendCommandsToServer(aiResult);
-        } catch (IOException | InterruptedException | ExecutionException e) {
-            Logger.getLogger("MagicCommand").warning("Error sending message to server: " + e.getMessage());
-        } finally {
-            button.visible = true;
-        }
-        MinecraftClient.getInstance().setScreen(null);
+        CompletableFuture.runAsync(() -> {
+            try {
+                String aiResult = aiUntil.getAiReturn(content);
+                Logger.getLogger("MagicCommand").info("Get message to server: " + aiResult);
+                MinecraftClient.getInstance().execute(() -> textField.setText(""));
+                sendCommandsToServer(aiResult);
+            } catch (IOException | InterruptedException | ExecutionException e) {
+                Logger.getLogger("MagicCommand").warning("Error sending message to server: " + e.getMessage());
+            } finally {
+                MinecraftClient.getInstance().execute(() -> button.visible = true);
+            }
+        }).thenAccept(
+                result -> MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().setScreen(null)));
     }
 
-    private void sendCommandsToServer(String aiResult) {
+    public void sendCommandsToServer(String aiResult) {
         if (aiResult.contains("&&")) {
             for (String command : aiResult.split("&&")) {
                 sendCommand(command.trim());
@@ -89,6 +99,7 @@ public class mcdScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(textRenderer, Text.literal("MagicCommand"), width / 2, height / 2, 0xffffff);
-        this.multilineText.draw(context, width / 2 - this.multilineText.getMaxWidth() / 2, height / 2 + 20, 20, 0xffffff);
+        this.multilineText.draw(context, width / 2 - this.multilineText.getMaxWidth() / 2, height / 2 + 20, 20,
+                0xffffff);
     }
 }
